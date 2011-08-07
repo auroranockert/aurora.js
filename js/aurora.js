@@ -1,5 +1,5 @@
 (function() {
-  var AIFFProbe, AVI, AVIProbe, Aurora, CAFProbe, FLACProbe, Matroska, MatroskaProbe, OggProbe, Probe, TTAProbe, WAV32Probe, WAV64Probe, _ref;
+  var AIFFProbe, AVI, AVIProbe, Aurora, CAFProbe, FLACProbe, FLVProbe, Matroska, MatroskaProbe, OggProbe, Probe, TTAProbe, WAV32Probe, WAV64Probe, _ref;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -131,6 +131,27 @@
     return FLACProbe;
   })();
   Aurora.Probes.push(FLACProbe);
+  FLVProbe = (function() {
+    __extends(FLVProbe, Probe);
+    function FLVProbe() {
+      FLVProbe.__super__.constructor.call(this);
+      this.minimumLength = 4;
+    }
+    FLVProbe.prototype.probe = function(buffer) {
+      var array;
+      if (CSCompare(buffer, 0, CSStringToBuffer('FLV'), 0, 3)) {
+        array = new Uint8Array(buffer);
+        if (array[3] < 0x05 && array[5] === 0x00) {
+          if (array[6] > 0x00 || array[7] > 0x00 || array[8] > 0x00 || array[9] > 0x08) {
+            return 1.0;
+          }
+        }
+      }
+      return 0.0;
+    };
+    return FLVProbe;
+  })();
+  Aurora.Probes.push(FLVProbe);
   Matroska = {};
   Matroska.Doctypes = [CSStringToBuffer('matroska'), CSStringToBuffer('webm')];
   MatroskaProbe = (function() {
