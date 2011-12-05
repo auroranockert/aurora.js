@@ -231,6 +231,8 @@ class Stream
     readBuffer: (length) ->
         result = Buffer.allocate(length)
         
+        result.position = @offset
+        
         to = result.data
         
         for i in [0 ... length]
@@ -240,6 +242,8 @@ class Stream
     
     readSingleBuffer: (length) ->
         result = @list.first.slice(@localOffset, length)
+        
+        result.position = @offset
         
         this.advance(result.length)
         
