@@ -34,20 +34,27 @@ class CAFDemuxer
         @list.push(buffer)
         
         if !@metadata && @stream.available(64) # Number out of my behind
-            if @stream.readString(4) != 'caff'
+            magicCookie = @stream.readString(4)
+            
+            if magicCookie != 'caff'
                 console.log("Invalid CAF, does not begin with 'caff'"); debugger
             
-            @metadata = {}
-            
-            @metadata.caff = {
-                version:            @stream.readUInt16()
-                flags:              @stream.readUInt16()
+            @metadata = {
+                caff: {
+                    version:        @stream.readUInt16()
+                    flags:          @stream.readUInt16()
+                }
             }
             
-            if @stream.readString(4) != 'desc'
+            descCookie = @stream.readString(4)
+            
+            if descCookie != 'desc'
                 console.log("Invalid CAF, 'caff' is not followed by 'desc'"); debugger
             
-            unless @stream.readUInt32() == 0 && @stream.readUInt32() == 32
+            descSizeA = @stream.readUInt32()
+            descSizeB = @stream.readUInt32()
+            
+            unless descSizeA == 0 && descSizeB == 32
                 console.log("Invalid 'desc' size, should be 32"); debugger
             
             @metadata.desc = {
