@@ -104,8 +104,6 @@ class HTTPSource
             
             @inflight = false
             
-            console.log("HTTP Finished: #{@name} (offset #{@offset >> 10} kB, length #{buffer.length >> 10} kB)")
-            
             return this.loop()
         
         onError = (event) =>
