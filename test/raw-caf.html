@@ -7,6 +7,7 @@
     <p>Decoding a LPCM CAF</p>
     
     <script src="/lib/aurora-io.js"></script>
+    <script src="vendor/sink.js"></script>
     
     <script>
       var bus = {
@@ -21,20 +22,34 @@
         }
       }
       
-      var httpSource = new Aurora.HTTPSource("Source")
-      var cafDemuxer = new Aurora.CAFDemuxer("Demuxer")
-      var pcmDecoder = new Aurora.LPCMDecoder("Decoder")
+      var httpSource  = new Aurora.HTTPSource("Source")
+      var cafDemuxer  = new Aurora.CAFDemuxer("Demuxer")
+      var pcmDecoder  = new Aurora.LPCMDecoder("Decoder")
+      var queue       = new Aurora.Queue("Queue")
       
       httpSource.url = "/data/caf/lpcm/End of Daylight.caf"
       
       httpSource.messagebus = bus
       cafDemuxer.messagebus = bus
       pcmDecoder.messagebus = bus
+      queue.messagebus      = bus
+      
+      queue.highwaterMark = 16
+      queue.lowwaterMark  = 2
       
       httpSource.outputs.data = cafDemuxer.inputs.data
       cafDemuxer.outputs.data = pcmDecoder.inputs.data
-      pcmDecoder.outputs.audio = audioBus
+      pcmDecoder.outputs.audio = queue.inputs.contents
       
+      queue.onHighwaterMark = function () {
+        console.log("Aurora is ready!")
+      }
+      
+      queue.onLowwaterMark = function () {
+        console.log("Doh, the level in the queue is very low!")
+      }
+      
+      queue.start()
       pcmDecoder.start()
       cafDemuxer.start()
       httpSource.start()
