@@ -1,6 +1,6 @@
 FormatIDtoAuroraID = {
-    'lpcm': { name: 'Linear PCM' }
-    'alac': { name: 'Apple Lossless Audio Codec (ALAC)' }
+    'lpcm': 'Linear PCM'
+    'alac': 'Apple Lossless Audio Codec (ALAC)'
 }
 
 class CAFDemuxer
@@ -72,7 +72,7 @@ class CAFDemuxer
                 }
             
             format.samplingFrequency  = @metadata.desc.samplingFrequency
-            format.channels           = @metadata.desc.channels
+            format.channels           = @metadata.desc.channelsPerFrame
             format.bitsPerChannel     = @metadata.desc.bitsPerChannel
             
             format.framesPerPacket    = @metadata.desc.framesPerPacket if @metadata.desc.framesPerPacket
