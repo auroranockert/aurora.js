@@ -43,6 +43,36 @@
       
       queue.onHighwaterMark = function () {
         console.log("Aurora is ready!")
+        
+        var output = queue.outputs.contents
+        
+        var f = output.receive()
+        var frame = new Float32Array(f.data.buffer), frameOffset = 0
+        
+        var sink = Sink(function(buffer, channelCount) {
+          var bufferOffset = 0
+          
+          while (frame && bufferOffset < buffer.length) {
+            for (var i = 0; i < Math.min(frame.length - frameOffset, buffer.length - bufferOffset); i++) {
+              buffer[bufferOffset + i] = frame[frameOffset + i]
+            }
+            
+            bufferOffset += i, frameOffset += i
+            
+            if (frameOffset == frame.length) {
+              f = output.receive()
+              
+              if (f) {
+                frame = new Float32Array(f.data.buffer), frameOffset = 0
+              } else {
+                frame = null, frameOffset = 0
+              }
+            }
+          }
+        }, f.metadata.format.channels, null, f.metadata.format.samplingFrequency);
+        
+        sink.on('error', function(e){ console.log(e) })
+        
       }
       
       queue.onLowwaterMark = function () {
