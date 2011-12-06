@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ALAC</title>
+</head>
+<body>
+    <p>Decoding a LPCM CAF</p>
+    
+    <script src="/lib/aurora-io.js"></script>
+    
+    <script>
+      var bus = {
+        send: function () {
+          console.log("Message Bus: ", arguments)
+        }
+      }
+      
+      var audioBus = {
+        send: function () {
+          console.log("Audio: ", arguments)
+        }
+      }
+      
+      var cookieBus = {
+        send: function () {
+          console.log("Cookie: ", arguments)
+        }
+      }
+      
+      var httpSource = new Aurora.HTTPSource("Source")
+      var cafDemuxer = new Aurora.CAFDemuxer("Demuxer")
+      
+      httpSource.url = "/data/caf/lpcm/End of Daylight.caf"
+      
+      httpSource.messagebus = bus
+      cafDemuxer.messagebus = bus
+      
+      httpSource.outputs.data = cafDemuxer.inputs.data
+      
+      cafDemuxer.outputs.cookie = cookieBus
+      cafDemuxer.outputs.data = audioBus
+      
+      cafDemuxer.start()
+      httpSource.start()
+    </script>
+</body>
+</html>
