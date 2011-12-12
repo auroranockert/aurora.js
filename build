@@ -1,3 +1,3 @@
 #! /bin/sh
 
-coffee --join lib/aurora-io.js --compile src/buffers/*.coffee src/sources/http-src.coffee src/containers/caf/caf-demux.coffee src/formats/lpcm/lpcm-dec.coffee src/misc/queue.coffee
+coffee --join lib/aurora-io.js --compile src/buffers/*.coffee src/sources/http-src.coffee src/containers/caf/caf-demux.coffee src/formats/lpcm/lpcm-dec.coffee src/misc/queue.coffee src/sinks/moz-sink.coffee
