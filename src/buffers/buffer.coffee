@@ -28,7 +28,7 @@ class Buffer
         buffer.discontinuity = @discontinuity
     
     slice: (position, length) ->
-        if position == 0 && length >= @length
+        if position == 0 && (length >= @length || length == null)
             return this
         else
             result = new Buffer(@data.subarray(position, length))
@@ -39,6 +39,6 @@ class Buffer
         
     
 
-window.Aurora = {} unless window.Aurora
+this.Aurora = {} unless this.Aurora
 
-window.Aurora.Buffer = Buffer
+this.Aurora.Buffer = Buffer

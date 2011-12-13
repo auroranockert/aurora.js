@@ -24,6 +24,6 @@ switch u32[0]
         throw "Oh shit, this computer has an unknown endianness (Probably an aurora.js bug, unless you're running on an extremely exotic machine)"
     
 
-window.Aurora = {} unless window.Aurora
+this.Aurora = {} unless this.Aurora
 
-window.Aurora.endian = endian
+this.Aurora.endian = endian

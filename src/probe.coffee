@@ -30,6 +30,6 @@ class Probe
 		@preferredLength = 8 * 1024
 	
 
-window.Aurora = Aurora
+this.Aurora = Aurora
 
 [Aurora.Probe, Aurora.Probes] = [Probe, []]

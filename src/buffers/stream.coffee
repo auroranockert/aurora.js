@@ -20,7 +20,11 @@ class Stream
         return result
     
     available: (bytes) ->
-        @list.availableBytes - @localOffset >= bytes
+        if bytes
+            return @list.availableBytes - @localOffset >= bytes
+        else
+            return @list.availableBytes
+        
     
     advance: (bytes) ->
         @localOffset += bytes; @offset += bytes
@@ -30,7 +34,7 @@ class Stream
         
         return this
     
-    readUInt32: () ->
+    readUInt32BE: () ->
         buffer = @list.first.data
         
         if buffer.length > @localOffset + 3
@@ -45,6 +49,24 @@ class Stream
             a1 = this.readUInt8()
             a2 = this.readUInt8()
             a3 = this.readUInt8()
+        
+        return ((a0 << 24) >>> 0) + (a1 << 16) + (a2 << 8) + (a3)
+    
+    readUInt32LE: () ->
+        buffer = @list.first.data
+        
+        if buffer.length > @localOffset + 3
+            a3 = buffer[@localOffset + 0]
+            a2 = buffer[@localOffset + 1]
+            a1 = buffer[@localOffset + 2]
+            a0 = buffer[@localOffset + 3]
+            
+            this.advance(4)
+        else
+            a3 = this.readUInt8()
+            a2 = this.readUInt8()
+            a1 = this.readUInt8()
+            a0 = this.readUInt8()
         
         return ((a0 << 24) >>> 0) + (a1 << 16) + (a2 << 8) + (a3)
     
@@ -64,7 +86,7 @@ class Stream
         
         return ((a0 << 24) >>> 0) + (a1 << 16) + (a2 << 8) + (a3)
     
-    readInt32: () ->
+    readInt32BE: () ->
         buffer = @list.first.data
         
         if buffer.length > @localOffset + offset + 3
@@ -79,6 +101,24 @@ class Stream
             a1 = this.readUInt8()
             a2 = this.readUInt8()
             a3 = this.readUInt8()
+        
+        return (a0 << 24) + (a1 << 16) + (a2 << 8) + (a3)
+    
+    readInt32LE: () ->
+        buffer = @list.first.data
+        
+        if buffer.length > @localOffset + offset + 3
+            a3 = buffer[@localOffset + 0]
+            a2 = buffer[@localOffset + 1]
+            a1 = buffer[@localOffset + 2]
+            a0 = buffer[@localOffset + 3]
+            
+            this.advance(4)
+        else
+            a3 = this.readUInt8()
+            a2 = this.readUInt8()
+            a1 = this.readUInt8()
+            a0 = this.readUInt8()
         
         return (a0 << 24) + (a1 << 16) + (a2 << 8) + (a3)
     
@@ -98,7 +138,7 @@ class Stream
         
         return (a0 << 24) + (a1 << 16) + (a2 << 8) + (a3)
     
-    readUInt16: () ->
+    readUInt16BE: () ->
         buffer = @list.first.data
         
         if buffer.length > @localOffset + 1
@@ -109,6 +149,20 @@ class Stream
         else
             a0 = this.readUInt8()
             a1 = this.readUInt8()
+        
+        return (a0 << 8) + (a1)
+    
+    readUInt16LE: () ->
+        buffer = @list.first.data
+        
+        if buffer.length > @localOffset + 1
+            a1 = buffer[@localOffset + 0]
+            a0 = buffer[@localOffset + 1]
+            
+            this.advance(2)
+        else
+            a1 = this.readUInt8()
+            a0 = this.readUInt8()
         
         return (a0 << 8) + (a1)
     
@@ -124,7 +178,7 @@ class Stream
         
         return (a0 << 8) + (a1)
     
-    readInt16: () ->
+    readInt16BE: () ->
         buffer = @list.first.data
         
         if buffer.length > @localOffset + 1
@@ -133,6 +187,18 @@ class Stream
         else
             a0 = this.readInt8()
             a1 = this.readUInt8()
+        
+        return (a0 << 8) + (a1)
+    
+    readInt16LE: () ->
+        buffer = @list.first.data
+        
+        if buffer.length > @localOffset + 1
+            a1 = buffer[@localOffset + 0]
+            a0 = buffer[@localOffset + 1]
+        else
+            a1 = this.readInt8()
+            a0 = this.readUInt8()
         
         return (a0 << 8) + (a1)
     
@@ -201,14 +267,25 @@ class Stream
         
         return ((buffer[offset] << 24) >> 24)
     
-    readFloat64: () ->
-        ToFloat64[1] = this.readUInt32()
-        ToFloat64[0] = this.readUInt32()
+    readFloat64BE: () -> # Native endian is assumed to be LE
+        ToFloat64[1] = this.readUInt32BE()
+        ToFloat64[0] = this.readUInt32BE()
         
         return FromFloat64[0]
     
-    readFloat32: () ->
-        ToFloat32[0] = this.readUInt32()
+    readFloat64LE: () -> # Native endian is assumed to be LE
+        ToFloat64[1] = this.readUInt32LE()
+        ToFloat64[0] = this.readUInt32LE()
+        
+        return FromFloat64[0]
+    
+    readFloat32BE: () ->
+        ToFloat32[0] = this.readUInt32BE()
+        
+        return FromFloat32[0]
+    
+    readFloat32LE: () ->
+        ToFloat32[0] = this.readUInt32LE()
         
         return FromFloat32[0]
     
@@ -250,6 +327,6 @@ class Stream
         return result
     
 
-window.Aurora = {} unless window.Aurora
+this.Aurora = {} unless this.Aurora
 
-window.Aurora.Stream = Stream
+this.Aurora.Stream = Stream

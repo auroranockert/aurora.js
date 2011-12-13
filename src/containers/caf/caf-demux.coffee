@@ -41,8 +41,8 @@ class CAFDemuxer
             
             @metadata = {
                 caff: {
-                    version:        @stream.readUInt16()
-                    flags:          @stream.readUInt16()
+                    version:        @stream.readUInt16BE()
+                    flags:          @stream.readUInt16BE()
                 }
             }
             
@@ -51,20 +51,20 @@ class CAFDemuxer
             if descCookie != 'desc'
                 console.log("Invalid CAF, 'caff' is not followed by 'desc'"); debugger
             
-            descSizeA = @stream.readUInt32()
-            descSizeB = @stream.readUInt32()
+            descSizeA = @stream.readUInt32BE()
+            descSizeB = @stream.readUInt32BE()
             
             unless descSizeA == 0 && descSizeB == 32
                 console.log("Invalid 'desc' size, should be 32"); debugger
             
             @metadata.desc = {
-                samplingFrequency:  @stream.readFloat64()
+                samplingFrequency:  @stream.readFloat64BE()
                 formatID:           @stream.readString(4)
-                formatFlags:        @stream.readUInt32()
-                bytesPerPacket:     @stream.readUInt32()
-                framesPerPacket:    @stream.readUInt32()
-                channelsPerFrame:   @stream.readUInt32()
-                bitsPerChannel:     @stream.readUInt32()
+                formatFlags:        @stream.readUInt32BE()
+                bytesPerPacket:     @stream.readUInt32BE()
+                framesPerPacket:    @stream.readUInt32BE()
+                channelsPerFrame:   @stream.readUInt32BE()
+                bitsPerChannel:     @stream.readUInt32BE()
             }
             
             if @metadata.desc.formatID == 'lpcm'
@@ -96,8 +96,8 @@ class CAFDemuxer
             unless @headerCache
                 @headerCache = {
                     type:               @stream.readString(4)
-                    oversize:           @stream.readUInt32() != 0
-                    size:               @stream.readUInt32()
+                    oversize:           @stream.readUInt32BE() != 0
+                    size:               @stream.readUInt32BE()
                 }
                 
                 if @headerCache.type == 'data' # Silly-Hack

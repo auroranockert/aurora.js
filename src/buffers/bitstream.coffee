@@ -132,6 +132,6 @@ class Bitstream
         
     
 
-window.Aurora = {} unless window.Aurora
+this.Aurora = {} unless this.Aurora
 
-window.Aurora.Bitstream = Bitstream
+this.Aurora.Bitstream = Bitstream
