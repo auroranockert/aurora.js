@@ -1,0 +1,19 @@
+#! /usr/bin/env ruby
+
+require 'execjs'
+require 'test/unit'
+
+$:.unshift File.dirname(__FILE__)
+$:.unshift "#{File.dirname(__FILE__)}/../"
+
+LIB = "#{File.dirname(__FILE__)}/../lib"
+VENDOR = "#{File.dirname(__FILE__)}/vendor"
+INCLUDES = ["#{File.dirname(__FILE__)}/../src", "#{File.dirname(__FILE__)}/.."]
+
+Dir.glob("#{File.dirname(__FILE__)}/**/*.rb") do |test|
+  require test
+end
+
+src = File.read("#{LIB}/aurora.js")
+
+Context = ExecJS.compile(src)
