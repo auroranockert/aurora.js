@@ -2,11 +2,35 @@ void function () {
 	var object = {
 		alloc: function () {
 			return Object.create(this, {
-				listeners: { value: {} }
+				_parent: {
+					value: null, writable: true
+				},
+				parent: {
+					get: function () {
+						return this._parent
+					}, set: function (parent) {
+						var old = this._parent
+						
+						this._parent = parent
+						
+						if (parent) {
+							this.dispatchEvent({ sender: this, type: 'parent-set', newParent: parent, oldParent: old })
+						} else {
+							this.dispatchEvent({ sender: this, type: 'parent-unset', oldParent: old })
+						}
+						
+						return parent
+					}, enumerable: true
+				},
+				listeners: {
+					value: {}
+				}
 			})
 		},
 		
-		init: function () {
+		init: function (parent) {
+			this._parent = parent
+			
 			return this
 		},
 			
