@@ -18,6 +18,8 @@ void function (global) {
 	
 	Aurora.utilitites = { }
 	
+	Aurora.sources = { }
+	
 	global.Aurora = Aurora
 	
 	if (!global.DataView) {

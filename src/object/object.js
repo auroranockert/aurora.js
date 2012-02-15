@@ -2,16 +2,14 @@ void function () {
 	var object = {
 		alloc: function () {
 			return Object.create(this, {
-				_parent: {
-					value: null, writable: true
-				},
+				hidden: { value: {} },
 				parent: {
 					get: function () {
 						return this._parent
 					}, set: function (parent) {
-						var old = this._parent
+						var old = this.hidden.parent
 						
-						this._parent = parent
+						this.hidden.parent = parent
 						
 						if (parent) {
 							this.dispatchEvent({ sender: this, type: 'parent-set', newParent: parent, oldParent: old })
@@ -22,23 +20,21 @@ void function () {
 						return parent
 					}, enumerable: true
 				},
-				listeners: {
-					value: {}
-				}
 			})
 		},
 		
 		init: function (parent) {
-			this._parent = parent
+			this.hidden.parent = parent
+			this.hidden.listeners = {}
 			
 			return this
 		},
 			
 		addEventListener: function (type, listener) {
-			var typeListeners = this.listeners[type]
+			var typeListeners = this.hidden.listeners[type]
 				
 			if (!typeListeners) {
-				typeListeners = this.listeners[type] = {}
+				typeListeners = this.hidden.listeners[type] = {}
 			}
 				
 			typeListeners[listener] = listener
@@ -47,7 +43,7 @@ void function () {
 		},
 			
 		removeEventListener: function (type, listener) {
-			var typeListeners = this.listeners[type]
+			var typeListeners = this.hidden.listeners[type]
 				
 			if (typeListeners) {
 				delete typeListeners[listener]
@@ -59,7 +55,7 @@ void function () {
 		dispatchEvent: function (event) {
 			var type = event.type
 			
-			var typeListeners = this.listeners[type]
+			var typeListeners = this.hidden.listeners[type]
 			
 			for (var key in typeListeners) {
 				typeListeners[key](event)
