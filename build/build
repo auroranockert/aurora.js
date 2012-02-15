@@ -1,0 +1,18 @@
+#! /usr/bin/env ruby
+
+require 'execjs'
+
+$:.unshift File.dirname(__FILE__)
+
+require 'include'
+require 'beautify'
+
+LIB = "#{File.dirname(__FILE__)}/../lib"
+VENDOR = "#{File.dirname(__FILE__)}/vendor"
+INCLUDES = ["#{File.dirname(__FILE__)}/../src", "#{File.dirname(__FILE__)}/.."]
+
+output = File.new("#{LIB}/aurora.js", 'w+')
+
+output << beautify(file('aurora.erb.js', :erb))
+
+output.close
