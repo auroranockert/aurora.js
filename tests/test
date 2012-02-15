@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
 
+require 'multi_json'
 require 'execjs'
 require 'test/unit'
 
@@ -16,4 +17,17 @@ end
 
 src = File.read("#{LIB}/aurora.js")
 
-Context = ExecJS.compile(src)
+Engine = {
+  'rubyracer'     => ExecJS::Runtimes::RubyRacer,
+  'rubyrhino'     => ExecJS::Runtimes::RubyRhino,
+  'johnson'       => ExecJS::Runtimes::Johnson,
+  'mustang'       => ExecJS::Runtimes::Mustang,
+  'node'          => ExecJS::Runtimes::Node,
+  'jsc'           => ExecJS::Runtimes::JavaScriptCore,
+  'spidermonkey'  => ExecJS::Runtimes::SpiderMonkey,
+  'jscript'       => ExecJS::Runtimes::JScript
+}[ENV['AURORA_ENGINE']] || ExecJS::Runtimes::RubyRacer
+
+p Engine
+
+Context = Engine.compile(src)

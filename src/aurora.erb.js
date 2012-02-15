@@ -25,4 +25,4 @@ void function (global) {
 	}
 	
 	<%= file 'object/object.js' %>
-}(this)
+}(this || global)
