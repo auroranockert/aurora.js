@@ -12,7 +12,7 @@ void function (global) {
 		error: 'error'
 	}
 	
-	Aurora.errors = {
+	Aurora.status = {
 		success: 'success'
 	}
 	

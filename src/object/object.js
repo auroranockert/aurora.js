@@ -1,11 +1,12 @@
 void function () {
 	var object = {
-		alloc: function () {
+		new: function () {
 			return Object.create(this, {
-				hidden: { value: {} },
+				name: { value: null, writable: true },
+				hidden: { value: { parent: null, listeners: {} } },
 				parent: {
 					get: function () {
-						return this._parent
+						return this.hidden.parent
 					}, set: function (parent) {
 						var old = this.hidden.parent
 						
@@ -23,13 +24,6 @@ void function () {
 			})
 		},
 		
-		init: function (parent) {
-			this.hidden.parent = parent
-			this.hidden.listeners = {}
-			
-			return this
-		},
-			
 		addEventListener: function (type, listener) {
 			var typeListeners = this.hidden.listeners[type]
 				
@@ -41,7 +35,7 @@ void function () {
 				
 			return this
 		},
-			
+		
 		removeEventListener: function (type, listener) {
 			var typeListeners = this.hidden.listeners[type]
 				
@@ -51,7 +45,7 @@ void function () {
 				
 			return this
 		},
-			
+		
 		dispatchEvent: function (event) {
 			var type = event.type
 			

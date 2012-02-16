@@ -1,19 +1,13 @@
-require 'execjs'
-require 'test/unit'
-
-LIB = "#{File.dirname(__FILE__)}/../../lib"
-
 class TestObject < Test::Unit::TestCase
-  def test_alloc_init
-    assert_equal({ 'parent' => nil }, Context.eval("Aurora.object.alloc()"),                      'should be a blank slate after allocation')
-    assert_not_nil(Context.eval("Aurora.object.alloc().init()"),                                  'should not be nil after initialization')
-    assert(Context.eval("Object.getPrototypeOf(Aurora.object.alloc().init()) == Aurora.object"),  'should have Aurora.object as prototype')
+  def test_new
+    assert_equal({ 'parent' => nil }, Context.eval("Aurora.object.new()"),              'should be a blank slate after allocation')
+    assert(Context.eval("Object.getPrototypeOf(Aurora.object.new()) == Aurora.object"), 'should have Aurora.object as prototype')
     
   end
   
   def test_properties
     src = <<EOF
-      var c = Aurora.object, o = Aurora.object.alloc().init(), op = []
+      var c = Aurora.object, o = Aurora.object.new(), op = []
       
       for (var p in o) { if (!c[p]) { op.push(p) } }
       
@@ -25,7 +19,7 @@ EOF
   
   def test_events
     src = <<EOF
-      var o = Aurora.object.alloc().init(), r = false
+      var o = Aurora.object.new(), r = false
       
       o.addEventListener('test', function () {
         r = true
@@ -39,7 +33,7 @@ EOF
     assert(Context.exec(src), 'should call event handler')
     
     src = <<EOF
-      var o = Aurora.object.alloc().init(), r = false
+      var o = Aurora.object.new(), r = false
       
       o.dispatchEvent({ type: 'test' })
       
@@ -49,7 +43,7 @@ EOF
     assert(!Context.exec(src), 'should not do anything')
     
     src = <<EOF
-      var o = Aurora.object.alloc().init(), r = false
+      var o = Aurora.object.new(), r = false
       
       var f = function () {
         r = true
@@ -68,7 +62,7 @@ EOF
   
   def test_parent
     src = <<EOF
-      var p = Aurora.object.alloc().init(), o = Aurora.object.alloc().init(), r = false
+      var p = Aurora.object.new(), o = Aurora.object.new(), r = false
       
       o.addEventListener('parent-set', function () {
         r = true
@@ -82,7 +76,7 @@ EOF
     assert(Context.exec(src), 'should call event handler')
 
     src = <<EOF
-      var o = Aurora.object.alloc().init(), r = false
+      var o = Aurora.object.new(), r = false
       
       o.addEventListener('parent-unset', function () {
         r = true
