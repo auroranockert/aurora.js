@@ -1,6 +1,6 @@
 void function () {
-	var object = {
-		new: function () {
+	Aurora.object = {
+		create: function () {
 			return Object.create(this, {
 				name: { value: null, writable: true },
 				hidden: { value: { parent: null, listeners: {} } },
@@ -59,7 +59,5 @@ void function () {
 		}
 	}
 	
-	Object.seal(object)
-	
-	Aurora.object = object
+	Object.seal(Aurora.object)
 }()

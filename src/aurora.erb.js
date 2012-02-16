@@ -27,4 +27,6 @@ void function (global) {
 	}
 	
 	<%= file 'object/object.js' %>
+	
+	<%= file 'object/task.js' %>
 }(this || global)

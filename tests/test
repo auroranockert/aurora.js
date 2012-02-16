@@ -28,6 +28,6 @@ Engine = {
   'jscript'       => ExecJS::Runtimes::JScript
 }[ENV['AURORA_ENGINE']] || ExecJS::Runtimes::RubyRacer
 
-p Engine
+puts "Using #{Engine.name}"
 
 Context = Engine.compile(src)
