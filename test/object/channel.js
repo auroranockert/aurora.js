@@ -12,11 +12,11 @@ ChannelTest.prototype.testMessaging = function () {
 	
 	var msg = 'A small message'
 	
-	channel.postMessage(msg)
+	channel.send(msg)
 	
 	assertEquals([msg], channel.queue)
-	assertEquals(msg, channel.peekMessage())
-	assertEquals(msg, channel.readMessage())
+	assertEquals(msg, channel.peek())
+	assertEquals(msg, channel.read())
 }
 
 ChannelTest.prototype.testHandler = function () {
@@ -28,10 +28,10 @@ ChannelTest.prototype.testHandler = function () {
 	
 	var msg = 'A small message'
 	
-	channel.postMessage(msg)
+	channel.send(msg)
 	
 	assertEquals([], channel.queue)
-	assertEquals(null, channel.peekMessage())
-	assertEquals(null, channel.readMessage())
+	assertEquals(null, channel.peek())
+	assertEquals(null, channel.read())
 }
 

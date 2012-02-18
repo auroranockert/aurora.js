@@ -17,7 +17,7 @@ void function () {
 		return result
 	}
 	
-	channel.postMessage = function (message) {
+	channel.send = function (message) {
 		var op = this.operation.pass
 		
 		if (this.handler) {
@@ -34,11 +34,11 @@ void function () {
 		
 	}
 	
-	channel.peekMessage = function () {
+	channel.peek = function () {
 		return this.queue[0]
 	}
 	
-	channel.readMessage = function () {
+	channel.read = function () {
 		return this.queue.shift()
 	}
 	
