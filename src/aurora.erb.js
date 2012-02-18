@@ -29,4 +29,5 @@ void function (global) {
 	<%= file 'object/object.js' %>
 	
 	<%= file 'object/task.js' %>
+	<%= file 'object/channel.js' %>
 }(this || global)
