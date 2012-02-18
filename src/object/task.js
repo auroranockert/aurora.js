@@ -29,15 +29,18 @@ void function () {
 				}
 			}
 			
-			this.hidden.state = this.states.started
-				
-			this.hidden.f()
+			this.hidden.timeout = global.setTimeout(this.hidden.f, 0)
 		}
+		
+		this.hidden.state = this.states.started
 	}
 		
 	Aurora.task.stop = function () {
-		if (this.hidden.state !== this.states.stopped) {
+		if (this.hidden.state === this.states.started) {
 			global.clearTimeout(this.hidden.timeout)
 		}
+		
+		this.hidden.state = this.states.stopped
+		
 	}
 }()
