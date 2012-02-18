@@ -30,9 +30,7 @@ ObjectTest.prototype.testAsyncEvents = function (queue) {
 	var o = Aurora.object.create(), r = false
 	
 	queue.call('Make sure that it does not accidentally trigger in current scope', function (callbacks) {
-		var cb = callbacks.add(function () { r = true })
-		
-		o.addEventListener('test', cb)
+		o.addEventListener('test', callbacks.add(function () { r = true }))
 		assertEquals(false, r)
 		
 		o.dispatchEvent({ type: 'test' })
@@ -44,22 +42,31 @@ ObjectTest.prototype.testAsyncEvents = function (queue) {
 	})
 }
 
-ObjectTest.prototype.testParent = function () {
+ObjectTest.prototype.testParent = function (queue) {
 	var p = Aurora.object.create(), o = Aurora.object.create(), r = false
 	
-	o.addEventListener('parent-set', function () {
-		r = true
+	queue.call('Make sure that it does not accidentally trigger in current scope', function (callbacks) {
+		o.addEventListener('parent-set', callbacks.add(function () { r = true }))
+		
+		o.parent = p
+		
+		assertEquals(p, o.parent)
+		assertEquals(false, r)
 	})
 	
-	o.addEventListener('parent-unset', function () {
-		r = false
+	queue.call('Make sure parent-set triggers once the interpreter is available', function (callbacks) {
+		assertEquals(true, r)
+		
+		var cb = callbacks.add(function () { r = false })
+		o.addEventListener('parent-unset', cb)
+		
+		o.parent = null
+		
+		assertEquals(null, o.parent)
+		assertEquals(true, r)
 	})
 	
-	o.parent = p
-	assertEquals(true, r)
-	assertEquals(p, o.parent)
-	
-	o.parent = null
-	assertEquals(false, r)
-	assertEquals(null, o.parent)
+	queue.call('Make sure parent-unset triggers once the interpreter is available', function (callbacks) {
+		assertEquals(false, r)
+	})
 }

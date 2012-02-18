@@ -21,9 +21,9 @@ void function () {
 					this.hidden.parent = parent
 					
 					if (parent) {
-						this.dispatchEvent({ sender: this, type: 'parent-set', newParent: parent, oldParent: old }, true)
+						this.dispatchEvent({ sender: this, type: 'parent-set', newParent: parent, oldParent: old })
 					} else {
-						this.dispatchEvent({ sender: this, type: 'parent-unset', oldParent: old }, true)
+						this.dispatchEvent({ sender: this, type: 'parent-unset', oldParent: old })
 					}
 					
 					return parent
