@@ -1,13 +1,13 @@
 void function () {
-	Aurora.task = Object.create(Aurora.object)
+	var task = Object.create(Aurora.object)
 	
-	Aurora.task.states = {
+	task.states = {
 		started: 'started',
 		stopped: 'stopped'
 	}
 	
-	Aurora.task.create = function (callback, async) {
-		var result = Object.getPrototypeOf(this).create.call(this)
+	task.create = function (callback, async) {
+		var result = this.prototype.create.call(this)
 		
 		Object.defineProperties(result, {
 			state: { value: this.states.stopped, writable: true, enumerable: true },
@@ -18,7 +18,7 @@ void function () {
 		return result
 	}
 		
-	Aurora.task.start = function () {
+	task.start = function () {
 		if (this.hidden.state !== this.states.started) {
 			this.hidden.f = function () {
 				this.callback()
@@ -34,17 +34,21 @@ void function () {
 		this.continue()
 	}
 	
-	Aurora.task.continue = function () {
+	task.continue = function () {
 		if (this.hidden.state === this.states.started) {
 			this.hidden.timeout = global.setTimeout(this.hidden.f, 0)
 		}
 	}
 	
-	Aurora.task.stop = function () {
+	task.stop = function () {
 		if (this.hidden.state === this.states.started) {
 			global.clearTimeout(this.hidden.timeout)
 		}
 		
 		this.hidden.state = this.states.stopped
 	}
+	
+	Object.seal(task)
+	
+	Aurora.task = task
 }()

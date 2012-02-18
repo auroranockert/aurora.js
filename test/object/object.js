@@ -3,8 +3,8 @@ ObjectTest = TestCase("Object Test");
 ObjectTest.prototype.testCreate = function () {
   var obj = Aurora.object.create()
   
-  assertEquals({ parent: null, name: null }, obj)
   assertEquals(Aurora.object, Object.getPrototypeOf(obj))
+  assertEquals({ name: null, parent: null, prototype: Aurora.object }, obj)
 }
 
 ObjectTest.prototype.testEvents = function () {
