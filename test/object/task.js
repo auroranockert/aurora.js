@@ -26,8 +26,7 @@ TaskTest.prototype.testOperation = function (queue) {
 		
 		o.start()
 	})
-	  
-      
+	
 	queue.call('Make sure it triggers once the interpreter is available', function () {
 		assertEquals(1, t)
 	})
@@ -52,8 +51,7 @@ TaskTest.prototype.testAsyncOperation = function (queue) {
 		
 		o.start()
 	})
-	  
-      
+	
 	queue.call('Make sure it triggers once the interpreter is available', function (callbacks) {
 		assertEquals(1, t)
 		
