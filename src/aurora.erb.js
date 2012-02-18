@@ -1,10 +1,10 @@
-"use strict";
-
 <%= file 'failbacks/jDataView/src/jdataview.js' %>
 
 <%= file 'LICENSE' %>
 
 void function (global) {
+	"use strict";
+	
 	var Aurora = {}
 	
 	Aurora.flow = {

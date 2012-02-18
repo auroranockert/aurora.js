@@ -2,7 +2,7 @@ void function () {
 	Aurora.object = {
 		create: function () {
 			return Object.create(this, {
-				name: { value: null, writable: true },
+				name: { value: null, writable: true, enumerable: true },
 				hidden: { value: { parent: null, listeners: {} } },
 				parent: {
 					get: function () {
