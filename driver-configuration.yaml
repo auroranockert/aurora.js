@@ -1,0 +1,4 @@
+server: http://localhost:9876
+load:
+  - lib/aurora.js
+  - test/object/*.js
