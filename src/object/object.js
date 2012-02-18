@@ -21,9 +21,9 @@ void function () {
 					this.hidden.parent = parent
 					
 					if (parent) {
-						this.dispatchEvent({ sender: this, type: 'parent-set', newParent: parent, oldParent: old })
+						this.dispatchEvent({ sender: this, type: 'parent-set', newParent: parent, oldParent: old }, true)
 					} else {
-						this.dispatchEvent({ sender: this, type: 'parent-unset', oldParent: old })
+						this.dispatchEvent({ sender: this, type: 'parent-unset', oldParent: old }, true)
 					}
 					
 					return parent
@@ -59,14 +59,22 @@ void function () {
 		
 		return this
 	}
-		
-	object.dispatchEvent = function (event) {
+	
+	var dispatch = function (self, event) {
 		var type = event.type
 		
-		var typeListeners = this.hidden.listeners[type]
+		var typeListeners = self.hidden.listeners[type]
 		
 		for (var key in typeListeners) {
 			typeListeners[key](event)
+		}
+	}
+		
+	object.dispatchEvent = function (event, sync) {
+		if (sync) {
+			dispatch(this, event)
+		} else {
+			global.setTimeout(dispatch, 0, this, event)
 		}
 		
 		return this
