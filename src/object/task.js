@@ -19,15 +19,13 @@ void function () {
 		
 	Aurora.task.start = function () {
 		if (this.hidden.state !== this.states.started) {
-			var self = this
-			
 			this.hidden.f = function () {
-				self.callback()
+				this.callback()
 				
-				if (self.hidden.state === self.states.started) {
-					self.hidden.timeout = global.setTimeout(self.hidden.f, 0)
+				if (this.hidden.state === this.states.started) {
+					this.hidden.timeout = global.setTimeout(this.hidden.f, 0)
 				}
-			}
+			}.bind(this)
 			
 			this.hidden.timeout = global.setTimeout(this.hidden.f, 0)
 		}
