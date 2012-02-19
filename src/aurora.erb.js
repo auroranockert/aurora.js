@@ -10,7 +10,6 @@ void function (global) {
 	Aurora.flow = {
 		ok: 'ok',
 		resend: 'resend',
-		
 		notLinked: 'not-linked',
 		wrongState: 'wrong-state',
 		
