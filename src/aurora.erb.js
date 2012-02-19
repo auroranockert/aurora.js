@@ -9,7 +9,15 @@ void function (global) {
 	
 	Aurora.flow = {
 		ok: 'ok',
-		error: 'error'
+		resend: 'resend',
+		
+		notLinked: 'not-linked',
+		wrongState: 'wrong-state',
+		
+		error: 'error',
+		unexpected: 'unexpected',
+		notSupported: 'not-supported',
+		notNegotiated: 'not-negotiated'
 	}
 	
 	Aurora.status = {
