@@ -1,5 +1,3 @@
-<%= file 'failbacks/jDataView/src/jdataview.js' %>
-
 <%= file 'LICENSE' %>
 
 void function (global) {
